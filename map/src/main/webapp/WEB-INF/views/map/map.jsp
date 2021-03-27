@@ -16,6 +16,7 @@
     <link href="css/lightbox.css" rel="stylesheet"> 
    <link href="css/main.css" rel="stylesheet">
    <link href="css/responsive.css" rel="stylesheet">
+   <link href="css/map.css" rel="stylesheet">
 
     <!--[if lt IE 9]>
        <script src="js/html5shiv.js"></script>
@@ -26,14 +27,21 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+     
 </head><!--/head-->
 
 <body>
+      
     <!-- 헤더 -->
    <%@ include file="/WEB-INF/views/include/header.jsp"%>
 
-   
-            <h1>맵입니다.</h1>
+    <!-- 카카오맵 API 설정 -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b04f710e2f3086922488a5fe2301c858"></script>
+    <div class="mapWrapper">
+    	<div id="map"></div>
+    </div>
+            
+           
             
     
     <!-- 푸터 -->
@@ -43,6 +51,10 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/lightbox.min.js"></script>
     <script type="text/javascript" src="js/wow.min.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>   
+    <script type="text/javascript" src="js/map.js"></script> 
+   
+  	 
+    
+      
 </body>
 </html>
