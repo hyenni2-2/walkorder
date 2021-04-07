@@ -1,10 +1,12 @@
-var container = document.getElementById('map'); //지도를 담을 영역의 DOM 레퍼런스
-var options = { //지도를 생성할 때 필요한 기본 옵션
-	center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-	level: 3 //지도의 레벨(확대, 축소 정도)
-};
+var localUrl = 'http://localhost:8081';
 
-var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+    mapOption = { 
+        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+        level: 10 // 지도의 확대 레벨 
+    }; 
+
+var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
 // HTML5의 geolocation으로 사용할 수 있는지 확인합니다 
 if (navigator.geolocation) {
@@ -16,11 +18,10 @@ if (navigator.geolocation) {
             lon = position.coords.longitude; // 경도
         
         var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-            message = '<div style="padding:5px;">START!</div>'; // 인포윈도우에 표시될 내용입니다
+            message = '<div style="padding:5px;">START</div>'; // 인포윈도우에 표시될 내용입니다
         
         // 마커와 인포윈도우를 표시합니다
-		 displayMarker(locPosition, message);
-
+        displayMarker(locPosition, message);
             
       });
     
@@ -55,7 +56,8 @@ function displayMarker(locPosition, message) {
     
     // 지도 중심좌표를 접속위치로 변경합니다
     map.setCenter(locPosition);      
-}  
+}   
+
 
 var drawingFlag = false; // 선이 그려지고 있는 상태를 가지고 있을 변수입니다
 var moveLine; // 선이 그려지고 있을때 마우스 움직임에 따라 그려질 선 객체 입니다
@@ -297,15 +299,6 @@ function getTimeHTML(distance) {
     }
     walkMin = '<span class="number">' + walkkTime % 60 + '</span>분'
 
-    // 자전거의 평균 시속은 16km/h 이고 이것을 기준으로 자전거의 분속은 267m/min입니다
-    var bycicleTime = distance / 227 | 0;
-    var bycicleHour = '', bycicleMin = '';
-
-    // 계산한 자전거 시간이 60분 보다 크면 시간으로 표출합니다
-    if (bycicleTime > 60) {
-        bycicleHour = '<span class="number">' + Math.floor(bycicleTime / 60) + '</span>시간 '
-    }
-    bycicleMin = '<span class="number">' + bycicleTime % 60 + '</span>분'
 
     // 거리와 도보 시간, 자전거 시간을 가지고 HTML Content를 만들어 리턴합니다
     var content = '<ul class="dotOverlay distanceInfo">';
@@ -315,10 +308,26 @@ function getTimeHTML(distance) {
     content += '    <li>';
     content += '        <span class="label">도보</span>' + walkHour + walkMin;
     content += '    </li>';
-    content += '    <li>';
-    content += '        <span class="label">자전거</span>' + bycicleHour + bycicleMin;
-    content += '    </li>';
     content += '</ul>'
 
     return content;
 }
+
+// 거리 정보 ajax로 보내주기
+$.ajax({
+    url: localUrl + '/map/distance',
+    type: 'POST',
+    data: {
+        memIdx : memIdx,
+        memName : memName,
+        distance : distance
+    },
+    success(data){
+        console.log(data);
+    }, error:function(e){
+        console.log('에러 : ' + e);
+    }
+});
+
+
+
